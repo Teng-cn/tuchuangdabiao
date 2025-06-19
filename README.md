@@ -177,8 +177,4 @@ frontend/
 3. 如何修改配置？
 4. 如何扩展功能？
 
-## 14. 联系方式
 
-- 技术支持：support@example.com
-- 问题反馈：feedback@example.com
-- 官方网站：www.example.com 
