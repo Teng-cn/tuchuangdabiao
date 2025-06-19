@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.imagehosting.dao.AnnotationDataDao">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.imagehosting.model.entity.AnnotationData">
+        <id column="id" property="id"/>
+        <result column="project_id" property="projectId"/>
+        <result column="image_id" property="imageId"/>
+        <result column="user_id" property="userId"/>
+        <result column="content" property="content"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+    
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, project_id, image_id, user_id, content, create_time, update_time
+    </sql>
+    
+    <!-- 插入标注数据 -->
+    <insert id="insert" parameterType="com.imagehosting.model.entity.AnnotationData" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO annotation_data
+        (project_id, image_id, user_id, content, create_time, update_time)
+        VALUES
+        (#{projectId}, #{imageId}, #{userId}, #{content}, #{createTime}, #{updateTime})
+    </insert>
+    
+    <!-- 根据项目ID和图片ID查询标注数据 -->
+    <select id="findByProjectIdAndImageId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM annotation_data
+        WHERE project_id = #{projectId} AND image_id = #{imageId}
+    </select>
+    
+    <!-- 更新标注数据 -->
+    <update id="update" parameterType="com.imagehosting.model.entity.AnnotationData">
+        UPDATE annotation_data
+        <set>
+            <if test="content != null">content = #{content},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 根据项目ID查询标注数据 -->
+    <select id="findByProjectId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM annotation_data
+        WHERE project_id = #{projectId}
+    </select>
+    
+    <!-- 根据项目ID删除标注数据 -->
+    <delete id="deleteByProjectId">
+        DELETE FROM annotation_data WHERE project_id = #{projectId}
+    </delete>
+</mapper> 

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.imagehosting.dao.AnnotationCategoryDao">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.imagehosting.model.entity.AnnotationCategory">
+        <id column="id" property="id"/>
+        <result column="project_id" property="projectId"/>
+        <result column="name" property="name"/>
+        <result column="color" property="color"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+    
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, project_id, name, color, create_time
+    </sql>
+    
+    <!-- 批量插入标注类别 -->
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO annotation_category
+        (project_id, name, color, create_time)
+        VALUES
+        <foreach collection="categories" item="item" separator=",">
+            (#{item.projectId}, #{item.name}, #{item.color}, #{item.createTime})
+        </foreach>
+    </insert>
+    
+    <!-- 根据项目ID查询标注类别 -->
+    <select id="selectByProjectId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM annotation_category
+        WHERE project_id = #{projectId}
+    </select>
+    
+    <!-- 根据项目ID删除标注类别 -->
+    <delete id="deleteByProjectId">
+        DELETE FROM annotation_category WHERE project_id = #{projectId}
+    </delete>
+</mapper> 

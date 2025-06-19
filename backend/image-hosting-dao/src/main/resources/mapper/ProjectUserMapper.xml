@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.imagehosting.dao.ProjectUserDao">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.imagehosting.model.entity.ProjectUser">
+        <id column="id" property="id"/>
+        <result column="project_id" property="projectId"/>
+        <result column="user_id" property="userId"/>
+        <result column="role" property="role"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+    
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, project_id, user_id, role, create_time
+    </sql>
+    
+    <!-- 批量插入项目用户 -->
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO project_user
+        (project_id, user_id, role, create_time)
+        VALUES
+        <foreach collection="projectUsers" item="item" separator=",">
+            (#{item.projectId}, #{item.userId}, #{item.role}, #{item.createTime})
+        </foreach>
+    </insert>
+    
+    <!-- 根据项目ID和用户ID查询 -->
+    <select id="findByProjectIdAndUserId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM project_user
+        WHERE project_id = #{projectId} AND user_id = #{userId}
+    </select>
+    
+    <!-- 根据项目ID查询用户列表 -->
+    <select id="findByProjectId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM project_user
+        WHERE project_id = #{projectId}
+    </select>
+    
+    <!-- 根据项目ID删除 -->
+    <delete id="deleteByProjectId">
+        DELETE FROM project_user WHERE project_id = #{projectId}
+    </delete>
+    
+    <!-- 检查项目用户关联是否存在 -->
+    <select id="existsByProjectIdAndUserId" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM project_user
+        WHERE project_id = #{projectId} AND user_id = #{userId}
+    </select>
+</mapper> 
